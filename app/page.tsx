@@ -163,7 +163,7 @@ export default function Home() {
 
           <div style={{ textAlign: "center", marginTop: "25px" }}>
             <a
-              href="https://cursor.com/install-mcp?name=eda-mcp-server&config=eyJ1cmwiOiJodHRwczovL2VkYS1tY3Atc2VydmVyLnZlcmNlbC5hcHAvc3NlIn0="
+              href="https://cursor.com/install-mcp?name=eda-mcp-server&config=eyJ1cmwiOiJodHRwczovL2VkYS1tY3Atc2VydmVyLnZlcmNlbC5hcHAvIn0="
               className="cta-button cursor-button"
               target="_blank"
               rel="noopener noreferrer"
