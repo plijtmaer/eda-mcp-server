@@ -3,6 +3,7 @@ import { getRedisUrl, isRedisAvailable } from "../../lib/redis";
 import {
   echoTool,
   edaTool,
+  edaToolJS,
 } from "../../tools";
 
 const handler = createMcpHandler(
@@ -19,6 +20,13 @@ const handler = createMcpHandler(
       edaTool.description,
       edaTool.schema,
       edaTool.handler
+    );
+
+    server.tool(
+      edaToolJS.name,
+      edaToolJS.description,
+      edaToolJS.schema,
+      edaToolJS.handler
     );
   },
   {},
