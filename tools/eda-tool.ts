@@ -51,7 +51,9 @@ export const edaTool = {
       const pythonScript = generatePythonScript(file_path, analysis_type, custom_code, columns, isUrl);
       
       // Write Python script to temporary file
-      const scriptPath = join(process.cwd(), 'temp_eda_script.py');
+      // Use /tmp directory in serverless environments (Vercel), current directory locally
+    const tempDir = process.env.VERCEL ? '/tmp' : process.cwd();
+    const scriptPath = join(tempDir, 'temp_eda_script.py');
       writeFileSync(scriptPath, pythonScript);
       
       // Execute Python script

@@ -1,18 +1,16 @@
-#!/usr/bin/env node
-
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
-import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
+import { SSEClientTransport } from "@modelcontextprotocol/sdk/client/sse.js";
 
 const origin = process.argv[2] || "http://localhost:3000";
 
 async function main() {
-  console.log(`🌐 Testing HTTP client with EDA MCP Server: ${origin}`);
+  console.log(`🌊 Testing SSE client with EDA MCP Server: ${origin}`);
   
-  const transport = new StreamableHTTPClientTransport(new URL(`${origin}/mcp`));
+  const transport = new SSEClientTransport(new URL(`${origin}/sse`));
 
   const client = new Client(
     {
-      name: "eda-mcp-http-client",
+      name: "eda-mcp-sse-client",
       version: "1.0.0",
     },
     {
@@ -25,9 +23,10 @@ async function main() {
   );
 
   try {
+    console.log("Connecting to", `${origin}/sse`);
     await client.connect(transport);
 
-    console.log("✅ Connected to HTTP endpoint", client.getServerCapabilities());
+    console.log("✅ Connected to SSE endpoint", client.getServerCapabilities());
 
     const result = await client.listTools();
     console.log("📋 Available tools:", result.tools.map(t => t.name));
@@ -36,7 +35,7 @@ async function main() {
     if (result.tools.some(t => t.name === "echo")) {
       console.log("\n🚀 Testing echo tool...");
       const echoResult = await client.callTool("echo", {
-        message: "Hello from HTTP client!",
+        message: "Hello from SSE client!",
       });
       console.log("Echo result:", echoResult.content[0]?.text);
     }
@@ -55,12 +54,12 @@ async function main() {
       }
     }
 
-    console.log("\n✅ HTTP client testing completed");
+    console.log("\n✅ SSE client testing completed");
     client.close();
   } catch (error) {
-    console.error("❌ HTTP test failed:", error.message);
+    console.error("❌ SSE test failed:", error.message);
     process.exit(1);
   }
 }
 
-main();
+main(); 

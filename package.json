@@ -9,6 +9,8 @@
     "setup": "./scripts/setup.sh",
     "test:mcp": "node test-mcp.mjs",
     "test:eda": "node test-eda.mjs",
+    "test:sse": "node scripts/test-sse-client.mjs http://localhost:3000",
+    "test:http": "node scripts/test-streamable-http-client.mjs http://localhost:3000",
     "test:stdio": "npx -y mcp-remote http://localhost:3000/mcp",
     "agent": "tsx agent/simple-agent.ts",
     "agent:demo": "tsx agent/simple-agent.ts demo",
