@@ -22,17 +22,21 @@
     "@upstash/redis": "^1.35.0",
     "@vercel/mcp-adapter": "0.8.2",
     "dotenv": "^17.0.0",
+    "ml-matrix": "^6.12.1",
     "next": "15.2.4",
     "openai": "^5.8.2",
+    "papaparse": "^5.5.3",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "redis": "^4.7.0",
+    "simple-statistics": "^7.8.8",
     "ts-node": "^10.9.2",
     "tsx": "^4.20.3",
     "zod": "^3.24.2"
   },
   "devDependencies": {
     "@types/node": "^20.17.46",
+    "@types/papaparse": "^5.3.16",
     "@types/react": "^19",
     "typescript": "^5"
   },

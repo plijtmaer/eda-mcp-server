@@ -1,7 +1,5 @@
 import { z } from "zod";
-// @ts-ignore
 import * as Papa from "papaparse";
-// @ts-ignore  
 import * as ss from "simple-statistics";
 
 export const edaToolJS = {
