@@ -109,6 +109,11 @@ node test-mcp.mjs http://localhost:3000 exploratory-data-analysis '{"file_path":
 
 node test-mcp.mjs http://localhost:3000 exploratory-data-analysis '{"file_path": "data/financial_data.csv", "analysis_type": "correlation_analysis"}'
 
+# Or test with the deployed Vercel server:
+node test-mcp.mjs https://eda-mcp-server.vercel.app exploratory-data-analysis '{"file_path": "https://eda-mcp-server.vercel.app/data/sample_data.csv", "analysis_type": "basic_info"}'
+
+node test-mcp.mjs https://eda-mcp-server.vercel.app exploratory-data-analysis '{"file_path": "https://eda-mcp-server.vercel.app/data/sales_data.csv", "analysis_type": "statistical_summary"}'
+
 # 4. Run the simple AI agent (basic implementation for testing and demos)
 pnpm agent
 ```
@@ -192,6 +197,38 @@ The **Exploratory Data Analysis** tool is the heart of this system, offering **6
 - **File-based analysis** - Local file processing
 - **Python pandas integration** - Full pandas ecosystem
 
+### **📁 Using Your Own Data**
+
+#### **🏠 Local Development (Full Flexibility)**
+```bash
+# Any local file path works
+node test-mcp.mjs http://localhost:3000 exploratory-data-analysis '{"file_path": "data/my_data.csv", "analysis_type": "basic_info"}'
+
+node test-mcp.mjs http://localhost:3000 exploratory-data-analysis '{"file_path": "/Users/yourname/Documents/sales.csv", "analysis_type": "statistical_summary"}'
+
+# HTTP URLs also work
+node test-mcp.mjs http://localhost:3000 exploratory-data-analysis '{"file_path": "https://raw.githubusercontent.com/yourname/repo/main/data.csv", "analysis_type": "correlation_analysis"}'
+```
+
+#### **🌐 Deployed Server (HTTP URLs Only)**
+```bash
+# Use the provided sample data
+node test-mcp.mjs https://eda-mcp-server.vercel.app exploratory-data-analysis '{"file_path": "https://eda-mcp-server.vercel.app/data/sample_data.csv", "analysis_type": "basic_info"}'
+
+# Use your own data hosted online
+node test-mcp.mjs https://eda-mcp-server.vercel.app exploratory-data-analysis '{"file_path": "https://raw.githubusercontent.com/yourname/yourrepo/main/yourdata.csv", "analysis_type": "statistical_summary"}'
+
+# Upload to Dropbox/Google Drive and use direct download links
+node test-mcp.mjs https://eda-mcp-server.vercel.app exploratory-data-analysis '{"file_path": "https://www.dropbox.com/s/abc123/data.csv?dl=1", "analysis_type": "correlation_analysis"}'
+```
+
+#### **💡 Ways to Host Your Data Online:**
+1. **GitHub**: Upload CSV to repository, use raw.githubusercontent.com URL
+2. **Dropbox**: Share file, add `?dl=1` to end of URL for direct download
+3. **Google Drive**: Share as public, use direct download link
+4. **Your own website**: Host CSV files in a public directory
+5. **Data hosting services**: Kaggle, data.world, etc.
+
 ### **❌ Not Yet Supported (Future Development)**
 - **Database connectivity** (PostgreSQL, MySQL, MongoDB)
 - **Real-time streaming data**
@@ -226,6 +263,16 @@ pnpm agent
 - *"Find outliers in the employee salary data"*
 - *"Compare weather patterns across all days"*
 
+**Using your own data with the AI agent:**
+
+🏠 **Local development:**
+- *"Analyze /Users/me/Documents/sales_2024.csv with statistical summary"*
+- *"Show me basic info for data/customer_data.csv"*
+
+🌐 **With deployed server (use HTTP URLs):**
+- *"Analyze https://raw.githubusercontent.com/me/myrepo/main/sales.csv with correlation analysis"*
+- *"Show distribution analysis for https://www.dropbox.com/s/abc123/data.csv?dl=1"*
+
 #### **Demo Mode**  
 ```bash
 pnpm agent:demo
@@ -242,15 +289,25 @@ pnpm agent:demo
 
 ### **🔧 MCP Server Testing**
 ```bash
-# List all available tools
+# List all available tools (local)
 pnpm test:mcp
 
-# Test basic connectivity  
+# Test basic connectivity (local)
 pnpm test:mcp http://localhost:3000 echo "Hello World"
 
-# Verify tool discovery
+# Test deployed server
+node test-mcp.mjs https://eda-mcp-server.vercel.app echo "Hello from deployed server"
+
+# Verify tool discovery (local)
 curl -X POST http://localhost:3000/mcp \
   -H "Content-Type: application/json" \
+  -H "Accept: application/json, text/event-stream" \
+  -d '{"jsonrpc":"2.0","method":"tools/list","id":1}'
+
+# Verify deployed server tools
+curl -X POST https://eda-mcp-server.vercel.app/mcp \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json, text/event-stream" \
   -d '{"jsonrpc":"2.0","method":"tools/list","id":1}'
 ```
 

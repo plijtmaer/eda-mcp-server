@@ -1,0 +1,16 @@
+name,age,salary,department,years_experience,satisfaction_score,city
+John Doe,28,65000,Engineering,5,8.5,New York
+Jane Smith,32,78000,Marketing,7,7.2,San Francisco
+Bob Johnson,45,92000,Engineering,15,9.1,Seattle
+Alice Brown,29,54000,Marketing,3,6.8,Austin
+Charlie Wilson,38,105000,Sales,12,8.9,Chicago
+Diana Davis,26,48000,HR,2,7.5,Boston
+Eve Martinez,41,88000,Engineering,18,8.7,Portland
+Frank Garcia,35,71000,Sales,8,7.9,Denver
+Grace Lee,30,69000,Marketing,6,8.2,Miami
+Henry Taylor,33,76000,Engineering,9,8.4,Atlanta
+Ivy Chen,27,52000,HR,4,7.1,Phoenix
+Jack Rodriguez,42,98000,Sales,14,9.0,Las Vegas
+Karen White,31,67000,Marketing,5,7.8,Nashville
+Leo Anderson,39,85000,Engineering,11,8.6,Salt Lake City
+Maya Patel,25,46000,HR,1,6.9,San Diego 

@@ -1,0 +1,9 @@
+company,sector,revenue_million,profit_margin,employees,market_cap_billion,debt_ratio
+TechCorp,Technology,15400,0.22,45000,285.5,0.15
+HealthPlus,Healthcare,8900,0.18,23000,150.2,0.25
+EnergyMax,Energy,22100,0.14,78000,320.8,0.45
+RetailCo,Retail,12300,0.08,85000,95.7,0.35
+BankSecure,Financial,7600,0.28,18000,180.4,0.55
+AutoDrive,Automotive,18700,0.12,62000,210.3,0.40
+FoodBrand,Consumer Goods,9200,0.15,34000,120.6,0.25
+BuildCorp,Construction,5800,0.10,28000,75.2,0.50 

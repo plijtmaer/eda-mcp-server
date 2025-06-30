@@ -26,18 +26,29 @@ export const edaTool = {
     columns?: string[];
   }) => {
     try {
-      // Check if file exists
-      if (!existsSync(file_path)) {
+      // Check if file exists (for local files) or if it's a URL
+      const isUrl = file_path.startsWith('http://') || file_path.startsWith('https://');
+      
+      if (!isUrl && !existsSync(file_path)) {
         return {
           content: [{ 
             type: "text" as const, 
-            text: `❌ Error: File '${file_path}' not found. Please provide a valid file path.` 
+            text: `❌ Error: File '${file_path}' not found. 
+
+📝 **Using the deployed server? Try these options:**
+• Sample datasets: https://eda-mcp-server.vercel.app/data/sample_data.csv
+• Your own HTTP URLs: https://your-domain.com/your-data.csv
+• Upload your data to GitHub/Dropbox and use the raw URL
+
+📁 **For local development:** Use local paths like "data/sample_data.csv" or "/full/path/to/your/file.csv"
+
+💡 **Tip:** To analyze your own data with the deployed server, host your CSV files online and use the HTTP URL.` 
           }],
         };
       }
 
       // Generate Python script based on analysis type
-      const pythonScript = generatePythonScript(file_path, analysis_type, custom_code, columns);
+      const pythonScript = generatePythonScript(file_path, analysis_type, custom_code, columns, isUrl);
       
       // Write Python script to temporary file
       const scriptPath = join(process.cwd(), 'temp_eda_script.py');
@@ -76,30 +87,36 @@ function generatePythonScript(
   filePath: string, 
   analysisType: string, 
   customCode?: string, 
-  columns?: string[]
+  columns?: string[],
+  isUrl?: boolean
 ): string {
   const columnsFilter = columns && columns.length > 0 
     ? `df = df[${JSON.stringify(columns)}]` 
     : '';
     
-  const baseScript = `
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-import sys
-from io import StringIO
-import warnings
-warnings.filterwarnings('ignore')
-
-# Configure matplotlib for non-interactive use
-plt.switch_backend('Agg')
-
-try:
-    # Load the data
+  const dataLoadingScript = isUrl ? `
+    # Load data from URL
+    import requests
+    file_path = "${filePath}"
+    
+    try:
+        response = requests.get(file_path)
+        response.raise_for_status()
+        from io import StringIO
+        
+        if file_path.lower().endswith('.csv'):
+            df = pd.read_csv(StringIO(response.text))
+        else:
+            # Try reading as CSV anyway
+            df = pd.read_csv(StringIO(response.text))
+    except Exception as e:
+        print(f"❌ Error loading data from URL: {e}")
+        print(f"📡 Attempted URL: {file_path}")
+        sys.exit(1)
+  ` : `
+    # Load data from local file
     file_path = r"${filePath}"
     
-    # Try to read as CSV first, then as text
     try:
         if file_path.lower().endswith('.csv'):
             df = pd.read_csv(file_path)
@@ -119,6 +136,23 @@ try:
             for i, line in enumerate(lines[:5]):
                 print(f"  {i+1}: {line.strip()}")
             sys.exit(0)
+  `;
+    
+  const baseScript = `
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import sys
+from io import StringIO
+import warnings
+warnings.filterwarnings('ignore')
+
+# Configure matplotlib for non-interactive use
+plt.switch_backend('Agg')
+
+try:
+    ${dataLoadingScript}
     
     print(f"📊 Data loaded successfully: {df.shape[0]} rows × {df.shape[1]} columns")
     ${columnsFilter}

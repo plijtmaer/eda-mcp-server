@@ -38,11 +38,13 @@ interface MCPResponse {
 
 class SimpleAgent {
   private openai: OpenAI;
-  private mcpBaseUrl: string;
+  private mcpUrl: string;
   private availableTools: MCPTool[] = [];
 
   constructor(mcpUrl: string = "http://localhost:3000") {
-    this.mcpBaseUrl = mcpUrl;
+    this.mcpUrl = mcpUrl;
+    console.log(`🤖 Initializing EDA Agent with MCP server: ${mcpUrl}`);
+    console.log(`💡 Use 'https://eda-mcp-server.vercel.app' to test with deployed server`);
     
     // Initialize OpenAI (requires OPENAI_API_KEY in .env.local)
     this.openai = new OpenAI({
@@ -54,7 +56,7 @@ class SimpleAgent {
    * Make a request to the MCP server
    */
   private async makeMCPRequest(method: string, params: any = {}): Promise<MCPResponse> {
-    const response = await fetch(`${this.mcpBaseUrl}/mcp`, {
+    const response = await fetch(`${this.mcpUrl}/mcp`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -93,7 +95,7 @@ class SimpleAgent {
    */
   async initialize(): Promise<void> {
     console.log("🤖 Initializing Simple Agent...");
-    console.log(`🔗 Connecting to MCP server: ${this.mcpBaseUrl}`);
+    console.log(`🔗 Connecting to MCP server: ${this.mcpUrl}`);
     
     try {
       const response = await this.makeMCPRequest("tools/list");

@@ -1,0 +1,8 @@
+day,condition,temperature_f,humidity,wind_speed,precipitation
+Monday,Sunny,72,Low,5,0.0
+Tuesday,Partly Cloudy,68,Medium,15,0.0
+Wednesday,Rainy,59,High,8,2.5
+Thursday,Stormy,55,High,25,4.2
+Friday,Clear,75,Low,3,0.0
+Saturday,Overcast,62,Medium,10,0.3
+Sunday,Sunny,78,Low,2,0.0 

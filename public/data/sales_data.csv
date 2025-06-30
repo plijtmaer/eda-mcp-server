@@ -1,0 +1,11 @@
+product,region,sales_amount,quantity,date,sales_rep
+Laptop,North,2500,5,2024-01-15,Alice Johnson
+Desktop,South,1800,3,2024-01-16,Bob Smith
+Tablet,East,950,7,2024-01-17,Carol Brown
+Monitor,West,600,12,2024-01-18,David Wilson
+Laptop,South,2200,4,2024-01-19,Alice Johnson
+Keyboard,North,150,25,2024-01-20,Bob Smith
+Mouse,East,75,30,2024-01-21,Carol Brown
+Desktop,West,2100,4,2024-01-22,David Wilson
+Tablet,North,890,8,2024-01-23,Alice Johnson
+Monitor,South,720,15,2024-01-24,Bob Smith 
