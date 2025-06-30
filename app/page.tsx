@@ -20,63 +20,70 @@ export default function Home() {
             color: #333;
           }
           .container {
-            max-width: 900px;
+            max-width: 800px;
             margin: 0 auto;
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
-            padding: 50px;
+            padding: 30px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
             backdrop-filter: blur(10px);
           }
           h1 {
             color: #2c3e50;
-            margin-bottom: 10px;
-            font-size: 2.5em;
+            margin-bottom: 8px;
+            font-size: 2.2em;
             font-weight: 700;
             text-align: center;
           }
           .subtitle {
             text-align: center;
             color: #7f8c8d;
-            margin-bottom: 40px;
-            font-size: 1.2em;
+            margin-bottom: 25px;
+            font-size: 1.1em;
           }
           .description {
             background: #f8f9fa;
-            padding: 30px;
-            border-radius: 15px;
-            margin: 30px 0;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
             border-left: 5px solid #3498db;
+            font-size: 0.95em;
           }
           .features {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
           }
           .feature {
             background: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            padding: 18px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
             border: 1px solid #e9ecef;
           }
           .feature h3 {
             color: #2c3e50;
-            margin-bottom: 15px;
-            font-size: 1.3em;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+          }
+          .feature p {
+            font-size: 0.85em;
+            line-height: 1.4;
+            margin: 0;
           }
           .cta-button {
             display: inline-block;
             background: linear-gradient(135deg, #3498db, #2980b9);
             color: white;
-            padding: 15px 30px;
+            padding: 12px 24px;
             text-decoration: none;
             border-radius: 8px;
             font-weight: 600;
-            margin: 10px;
+            margin: 8px;
             text-align: center;
             transition: transform 0.2s ease;
+            font-size: 0.9em;
           }
           .cta-button:hover {
             transform: translateY(-2px);
@@ -88,32 +95,27 @@ export default function Home() {
           .github-button:hover {
             box-shadow: 0 8px 25px rgba(44, 62, 80, 0.3);
           }
+          .cursor-button {
+            background: linear-gradient(135deg, #007acc, #005a9e);
+            margin-bottom: 5px;
+          }
+          .cursor-button:hover {
+            box-shadow: 0 8px 25px rgba(0, 122, 204, 0.3);
+          }
           .tech-stack {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
-            margin: 20px 0;
+            gap: 8px;
+            margin: 15px 0;
+            justify-content: center;
           }
           .tech-badge {
             background: #e9ecef;
             color: #495057;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.9em;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
             font-weight: 500;
-          }
-          .quick-start {
-            background: #f8f9fa;
-            padding: 25px;
-            border-radius: 12px;
-            margin: 30px 0;
-            border-left: 5px solid #28a745;
-          }
-          .quick-start code {
-            background: #e9ecef;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: 'Monaco', 'Menlo', monospace;
           }
         `}</style>
       </head>
@@ -132,20 +134,20 @@ export default function Home() {
 
           <div className="features">
             <div className="feature">
-              <h3>📊 Advanced EDA Tools</h3>
-              <p>Six comprehensive analysis types: basic info, statistical summaries, correlation analysis, distribution plots, missing data analysis, and custom Python execution.</p>
+              <h3>📊 Advanced EDA</h3>
+              <p>Six analysis types: basic info, statistics, correlations, distributions, missing data, custom analysis.</p>
             </div>
             <div className="feature">
-              <h3>🤖 AI Agent Integration</h3>
-              <p>OpenAI-powered agent that plans and executes complex multi-step data analysis workflows using natural language queries.</p>
+              <h3>🤖 AI Agent</h3>
+              <p>OpenAI-powered agent for autonomous multi-step data analysis workflows.</p>
             </div>
             <div className="feature">
               <h3>🐍 Python Integration</h3>
-              <p>Seamless TypeScript-to-Python integration with pandas, matplotlib, seaborn, and numpy for professional data analysis.</p>
+              <p>Seamless TypeScript-to-Python integration with pandas, matplotlib, seaborn.</p>
             </div>
             <div className="feature">
               <h3>🚀 Production Ready</h3>
-              <p>Built with Next.js 15, TypeScript, Zod validation, and ready for Vercel deployment with comprehensive documentation.</p>
+              <p>Next.js 15, TypeScript, Zod validation, Vercel deployment ready.</p>
             </div>
           </div>
 
@@ -159,15 +161,16 @@ export default function Home() {
             <span className="tech-badge">Vercel</span>
           </div>
 
-          <div className="quick-start">
-            <h3>🚀 Quick Start</h3>
-            <p>1. Clone: <code>git clone https://github.com/plijtmaer/eda-mcp-server.git</code></p>
-            <p>2. Install: <code>pnpm install && pip3 install pandas matplotlib seaborn numpy</code></p>
-            <p>3. Setup: <code>echo &quot;OPENAI_API_KEY=your_key&quot; &gt; .env.local</code></p>
-            <p>4. Run: <code>pnpm dev</code></p>
-          </div>
-
-          <div style={{ textAlign: "center", marginTop: "40px" }}>
+          <div style={{ textAlign: "center", marginTop: "25px" }}>
+            <a
+              href="https://cursor.com/install-mcp?name=eda-mcp-server&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIkBtb2RlbGNvbnRleHRwcm90b2NvbC9zZXJ2ZXItZXZlcnl0aGluZyIsImh0dHBzOi8vZWRhLW1jcC1zZXJ2ZXIudmVyY2VsLmFwcC9tY3AiXX0="
+              className="cta-button cursor-button"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              🔌 Add to Cursor
+            </a>
+            <br />
             <a
               href="https://github.com/plijtmaer/eda-mcp-server"
               className="cta-button github-button"

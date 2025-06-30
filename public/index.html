@@ -29,75 +29,77 @@
       }
 
       .container {
-        max-width: 800px;
+        max-width: 700px;
         width: 100%;
         text-align: center;
         background: rgba(255, 255, 255, 0.95);
         border-radius: 20px;
-        padding: 50px;
+        padding: 30px;
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
         backdrop-filter: blur(10px);
       }
 
       .header {
-        margin-bottom: 48px;
+        margin-bottom: 30px;
       }
 
       h1 {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
         font-weight: 700;
         margin-bottom: 8px;
         color: #2c3e50;
       }
 
       .subtitle {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         color: #7f8c8d;
         font-weight: 400;
       }
 
       .description {
-        font-size: 1.1rem;
+        font-size: 1rem;
         color: #555;
-        margin-bottom: 40px;
+        margin-bottom: 25px;
         line-height: 1.6;
-        max-width: 600px;
+        max-width: 550px;
         margin-left: auto;
         margin-right: auto;
       }
 
       .features {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 20px;
-        margin-bottom: 40px;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+        margin-bottom: 25px;
         text-align: left;
       }
 
       .feature {
         background: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
       }
 
       .feature h3 {
         color: #2c3e50;
-        margin-bottom: 10px;
-        font-size: 1.1em;
+        margin-bottom: 8px;
+        font-size: 1em;
       }
 
       .feature p {
         color: #666;
-        font-size: 0.9em;
+        font-size: 0.8em;
+        margin: 0;
+        line-height: 1.4;
       }
 
       .buttons {
         display: flex;
         flex-direction: column;
-        gap: 16px;
+        gap: 12px;
         align-items: center;
-        margin-bottom: 48px;
+        margin-bottom: 25px;
       }
 
       .github-btn {
@@ -118,6 +120,27 @@
       .github-btn:hover {
         transform: translateY(-2px);
         box-shadow: 0 8px 25px rgba(44, 62, 80, 0.3);
+      }
+
+      .cursor-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 24px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        text-decoration: none;
+        color: white;
+        font-size: 1rem;
+        font-weight: 600;
+        background: linear-gradient(135deg, #007acc, #005a9e);
+        transition: all 0.2s ease;
+        margin-bottom: 15px;
+      }
+
+      .cursor-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 122, 204, 0.3);
       }
 
       .github-icon {
@@ -159,20 +182,18 @@
         <p class="subtitle">AI-Powered Exploratory Data Analysis Platform</p>
       </div>
 
-      <p class="description">
-        Comprehensive Model Context Protocol server providing intelligent data analysis tools 
-        powered by Python's data science ecosystem. Built with TypeScript, Next.js, and OpenAI 
-        integration for autonomous data exploration workflows.
-      </p>
+              <p class="description">
+            Model Context Protocol server for intelligent data analysis with Python's data science ecosystem. TypeScript, Next.js, and OpenAI integration for autonomous data workflows.
+        </p>
 
       <div class="features">
         <div class="feature">
-          <h3>�� Advanced EDA</h3>
-          <p>Six comprehensive analysis types with pandas, matplotlib, and seaborn integration</p>
+          <h3>📊 Advanced EDA</h3>
+          <p>Six analysis types with pandas, matplotlib, seaborn</p>
         </div>
         <div class="feature">
           <h3>🤖 AI Agent</h3>
-          <p>OpenAI-powered autonomous workflow planning and execution</p>
+          <p>OpenAI-powered autonomous workflow planning</p>
         </div>
         <div class="feature">
           <h3>🐍 Python Integration</h3>
@@ -185,6 +206,15 @@
       </div>
 
       <div class="buttons">
+        <a
+          href="https://cursor.com/install-mcp?name=eda-mcp-server&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIkBtb2RlbGNvbnRleHRwcm90b2NvbC9zZXJ2ZXItZXZlcnl0aGluZyIsImh0dHBzOi8vZWRhLW1jcC1zZXJ2ZXIudmVyY2VsLmFwcC9tY3AiXX0="
+          class="cursor-btn"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          🔌 Add to Cursor
+        </a>
+
         <a
           href="https://github.com/plijtmaer/eda-mcp-server"
           class="github-btn"
