@@ -12,7 +12,7 @@ This project demonstrates a complete **AI-powered data analysis workflow** using
 - **📊 Advanced EDA**: 6 different analysis types with comprehensive statistics
 - **🌐 Web Interface**: Modern Next.js web app with beautiful UI
 
-## 🏗️ Complete Tech Stack
+## 🏗️ Current Tech Stack
 
 ### **Backend & MCP Server**
 - **TypeScript** - Type-safe server logic
@@ -41,7 +41,7 @@ This project demonstrates a complete **AI-powered data analysis workflow** using
 
 ### **Deployment Ready**
 - **Vercel** - Serverless deployment platform
-- **Redis (Optional)** - SSE transport support
+- **Redis (Optional)** - SSE transport support only
 - **Docker Support** - Containerizable architecture
 
 ## 📋 Table of Contents
@@ -59,8 +59,8 @@ This project demonstrates a complete **AI-powered data analysis workflow** using
 
 ```bash
 # 1. Clone and install dependencies
-git clone <your-repo>
-cd hw3
+git clone https://github.com/plijtmaer/eda-mcp-server.git
+cd eda-mcp-server
 pnpm install
 
 # 2. Install Python dependencies
@@ -101,7 +101,7 @@ Create `.env.local` file:
 # Required for AI agent
 OPENAI_API_KEY=your_openai_api_key_here
 
-# Optional: Redis for SSE transport
+# Optional: Redis for SSE transport (communication only, not data storage)
 REDIS_URL=redis://localhost:6379
 ```
 
@@ -176,35 +176,19 @@ The **Exploratory Data Analysis** tool is the heart of this system, offering **6
 
 **Perfect for:** Specialized analysis requirements
 
-### **🎯 Tool Parameters**
+## 📊 Current Data Support
 
-```typescript
-interface EDAParams {
-  file_path: string;        // "./data/your_file.csv"
-  analysis_type: string;    // One of the 6 analysis types
-  custom_code?: string;     // Python code (custom_analysis only)
-  columns?: string[];       // Specific columns to analyze
-}
-```
+### **✅ Currently Supported**
+- **CSV files** - Comma-separated values
+- **TXT files** - Tab/comma/semicolon-separated structured data
+- **File-based analysis** - Local file processing
+- **Python pandas integration** - Full pandas ecosystem
 
-### **💡 Usage Examples**
-
-```bash
-# Quick dataset overview
-pnpm test:eda basic_info
-
-# Comprehensive statistics
-pnpm test:eda statistical_summary
-
-# Find data relationships  
-pnpm test:eda correlation_analysis
-
-# Detect outliers and data quality issues
-pnpm test:eda distribution_plots
-
-# Check data completeness
-pnpm test:eda missing_data_analysis
-```
+### **❌ Not Yet Supported (Future Development)**
+- **Database connectivity** (PostgreSQL, MySQL, MongoDB)
+- **Real-time streaming data**
+- **Cloud storage integration** (S3, GCS, Azure)
+- **API data ingestion**
 
 ## 🤖 AI Agent Features
 
@@ -243,28 +227,6 @@ pnpm agent:demo
 - Showcase of all capabilities
 - Automated report generation
 - Multiple dataset analysis
-
-### **🎯 How the Agent Works**
-
-1. **🔍 Discovery Phase**
-   - Connects to MCP server
-   - Enumerates available tools
-   - Scans data directory for files
-
-2. **🧠 Planning Phase**
-   - Sends user request to OpenAI
-   - Generates step-by-step analysis plan
-   - Selects appropriate tools and parameters
-
-3. **⚡ Execution Phase**
-   - Executes analysis steps sequentially
-   - Collects and formats results
-   - Provides comprehensive reporting
-
-4. **📊 Reporting Phase**
-   - Presents findings in readable format
-   - Highlights key insights
-   - Suggests follow-up analyses
 
 ## 📊 Sample Datasets
 
@@ -307,11 +269,6 @@ Use Cases: Corporate analysis, sector comparison, financial ratios
 2. Ensure structured format (comma/semicolon/tab separated)
 3. Use file path: `"./data/your_file.csv"`
 
-**Supported formats:**
-- **CSV** - Comma-separated values
-- **TXT** - Tab or comma-separated structured data
-- **Custom separators** - Automatically detected
-
 ## 🧪 Testing & Development
 
 ### **🔧 MCP Server Testing**
@@ -353,53 +310,25 @@ pnpm agent:demo
 DEBUG=* pnpm agent
 ```
 
-### **⚙️ Development Scripts**
-```json
-{
-  "dev": "next dev",              // Start Next.js server
-  "build": "next build",          // Build for production  
-  "start": "next start",          // Start production server
-  "test:mcp": "node test-mcp.mjs", // Test MCP tools
-  "test:eda": "node test-eda.mjs", // Test EDA functionality
-  "agent": "tsx agent/simple-agent.ts", // Run AI agent
-  "agent:demo": "tsx agent/simple-agent.ts demo" // Agent demo mode
-}
-```
-
 ## 🚀 Deployment Guide
 
 ### **🔥 Vercel Deployment (Recommended)**
 
-1. **Prepare for deployment:**
-```bash
-# Clean git history (remove original commits)
-rm -rf .git
-git init
-git add .
-git commit -m "Initial commit: EDA MCP Server"
-
-# Push to your GitHub
-git remote add origin https://github.com/yourusername/eda-mcp-server.git
-git branch -M main
-git push -u origin main
-```
-
-2. **Deploy to Vercel:**
+1. **Deploy from GitHub:**
 ```bash
 # Install Vercel CLI
 npm i -g vercel
 
-# Deploy
-vercel
-
-# Or use GitHub integration at vercel.com
+# Deploy directly from GitHub
+vercel --repo https://github.com/plijtmaer/eda-mcp-server
 ```
 
-3. **Environment variables in Vercel:**
-```bash
-# Set in Vercel dashboard
-OPENAI_API_KEY=your_openai_api_key
-```
+2. **Environment variables in Vercel:**
+- Set `OPENAI_API_KEY=your_openai_api_key` in Vercel dashboard
+- Optionally set `REDIS_URL` for SSE transport
+
+3. **Python dependencies:**
+- Vercel automatically installs Python packages if you add a `requirements.txt` file
 
 ### **🐳 Docker Deployment**
 
@@ -415,115 +344,75 @@ EXPOSE 3000
 CMD ["npm", "start"]
 ```
 
-```bash
-# Build and run
-docker build -t eda-mcp-server .
-docker run -p 3000:3000 eda-mcp-server
-```
-
-### **☁️ Cloud Deployment Options**
-- **Vercel** - Serverless, auto-scaling (Recommended)
-- **Netlify** - Static + serverless functions
-- **Railway** - Full-stack deployment
-- **AWS/GCP/Azure** - Enterprise-grade hosting
-
 ## 📁 Project Architecture
 
 ```
-hw3/                                 # 🏠 Project root
-├── agent/                           # 🤖 AI Agent system
-│   └── simple-agent.ts             # TypeScript AI agent
-├── app/                            # 🌐 Next.js application  
-│   ├── [transport]/route.ts        # MCP protocol handler
-│   ├── layout.tsx                  # App layout
-│   └── page.tsx                    # Web interface
-├── tools/                          # 🔧 MCP Tools
-│   ├── eda-tool.ts                 # Main EDA tool
-│   ├── echo.ts                     # Testing tool
-│   └── index.ts                    # Tool exports
-├── data/                           # 📊 Sample datasets
-│   ├── sample_data.csv             # Employee data
-│   ├── sales_data.csv              # Sales data  
-│   ├── weather_data.txt            # Weather data
-│   └── financial_data.csv          # Financial data
-├── lib/                            # 📚 Utility libraries
-│   └── redis.ts                    # Redis configuration
-├── test-mcp.mjs                    # 🧪 MCP server tester
-├── test-eda.mjs                    # 🧪 EDA tool tester
-├── package.json                    # 📦 Dependencies & scripts
-├── tsconfig.json                   # ⚙️ TypeScript config
-├── next.config.ts                  # ⚙️ Next.js config
-└── README.md                       # 📖 Documentation
+eda-mcp-server/                     # 🏠 Project root
+├── agent/                          # 🤖 AI Agent system
+│   └── simple-agent.ts            # TypeScript AI agent
+├── app/                           # 🌐 Next.js application  
+│   ├── [transport]/route.ts       # MCP protocol handler
+│   ├── layout.tsx                 # App layout
+│   └── page.tsx                   # Web interface
+├── tools/                         # 🔧 MCP Tools
+│   ├── eda-tool.ts                # Main EDA tool
+│   ├── echo.ts                    # Testing tool
+│   └── index.ts                   # Tool exports
+├── data/                          # 📊 Sample datasets
+│   ├── sample_data.csv            # Employee data
+│   ├── sales_data.csv             # Sales data  
+│   ├── weather_data.txt           # Weather data
+│   └── financial_data.csv         # Financial data
+├── lib/                           # 📚 Utility libraries
+│   └── redis.ts                   # Redis configuration (SSE transport only)
+├── test-mcp.mjs                   # 🧪 MCP server tester
+├── test-eda.mjs                   # 🧪 EDA tool tester
+├── package.json                   # 📦 Dependencies & scripts
+└── README.md                      # 📖 Documentation
 ```
 
-### **🎯 Key Design Patterns**
+## 🔮 Future Development Roadmap
 
-**MCP Architecture:**
-- **Server**: Next.js handles HTTP/SSE transport
-- **Tools**: Modular TypeScript functions with Zod validation
-- **Agent**: Autonomous TypeScript client with OpenAI integration
+### **🎯 Planned Features (Not Yet Implemented)**
 
-**Data Flow:**
-```
-User Request → AI Agent → MCP Server → EDA Tool → Python → Results → User
-```
+#### **📊 Data Sources**
+- Database connectivity (PostgreSQL, MySQL, MongoDB)
+- API data ingestion with authentication
+- Real-time streaming data processing
+- Cloud storage integration (S3, GCS, Azure)
 
-**Error Handling:**
-- Graceful Python subprocess failures
-- Tool validation with detailed error messages
-- Agent retry logic with fallback strategies
-
-## 🛡️ Production Considerations
-
-### **🔒 Security**
-- API key encryption in environment variables
-- Input validation with Zod schemas
-- Subprocess sandboxing for Python execution
-- CORS configuration for web security
-
-### **⚡ Performance**
-- Lazy loading of Python processes
-- Result caching for repeated analyses
-- Streaming responses for large datasets
-- Connection pooling for concurrent requests
-
-### **📈 Scalability**
-- Serverless architecture ready
-- Horizontal scaling support
-- Database integration capability
-- Multi-tenant data isolation
-
-## 🔮 Advanced Features & Extensions
-
-### **🎨 Visualization Enhancements**
-- Save matplotlib plots to files
-- Interactive charts with Plotly
-- Dashboard creation with real-time updates
-
-### **🧠 Agent Intelligence**
+#### **🧠 Agent Intelligence**
 - Memory for conversation context
-- Multi-step workflow planning
-- Custom analysis templates
+- Multi-step workflow planning with dependencies
+- Custom analysis templates and presets
 - Domain-specific expertise modules
 
-### **📊 Data Sources**
-- Database connectivity (PostgreSQL, MySQL)
-- API data ingestion
-- Real-time streaming data
-- Cloud storage integration (S3, GCS)
+#### **🎨 Visualization Enhancements**
+- Save matplotlib plots to files and URLs
+- Interactive charts with Plotly integration
+- Dashboard creation with real-time updates
+- Custom chart templates
 
-### **🔧 Tool Ecosystem**
-- Machine learning model training
-- Statistical hypothesis testing
-- Time series analysis
-- Geospatial data processing
+#### **🔧 Advanced Analytics**
+- Machine learning model training and evaluation
+- Statistical hypothesis testing suite
+- Time series analysis and forecasting
+- Geospatial data processing capabilities
+
+### **🚀 Contributing**
+
+This project is open for contributions! Priority areas:
+1. Database connectors for PostgreSQL/MySQL
+2. Advanced visualization features
+3. Machine learning integrations
+4. Performance optimizations
 
 ---
 
-## 📜 License & Contributing
-
-**Perfect for**: Learning MCP development, building data analysis workflows, creating AI agents, and understanding modern TypeScript/Python integration patterns.
+## 📜 License & Contact
 
 **Built with ❤️ using**: TypeScript, Next.js, Python, OpenAI, and the Model Context Protocol.
+
+**Repository**: [https://github.com/plijtmaer/eda-mcp-server](https://github.com/plijtmaer/eda-mcp-server)
 
 🚀 **Ready for production deployment and continuous enhancement!**
