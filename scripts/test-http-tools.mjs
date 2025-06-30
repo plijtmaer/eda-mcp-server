@@ -1,109 +1,64 @@
 #!/usr/bin/env node
 
-async function testHttpTools() {
-  const baseUrl =
-    process.argv[2] || "https://agent-engineering-bootcamp-mcp.vercel.app";
+import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 
-  console.log(`Testing MCP HTTP endpoints on: ${baseUrl}\n`);
+const origin = process.argv[2] || "https://eda-mcp-server.vercel.app";
+
+async function testHttpTools() {
+  console.log(`🌐 Testing EDA MCP Server via HTTP: ${origin}`);
+  
+  const transport = new StreamableHTTPClientTransport(new URL(`${origin}/mcp`));
+
+  const client = new Client(
+    {
+      name: "eda-mcp-http-test",
+      version: "1.0.0",
+    },
+    {
+      capabilities: {
+        tools: {},
+      },
+    }
+  );
 
   try {
-    // Test the /mcp endpoint (HTTP transport)
-    console.log("Testing HTTP transport at /mcp:");
-    const httpResponse = await fetch(`${baseUrl}/mcp`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json, text/event-stream",
-      },
-      body: JSON.stringify({
-        jsonrpc: "2.0",
-        method: "tools/list",
-        params: {},
-        id: 1,
-      }),
-    });
+    await client.connect(transport);
+    console.log("✅ Connected successfully");
 
-    if (httpResponse.ok) {
-      const contentType = httpResponse.headers.get("content-type");
-      console.log("Content-Type:", contentType);
+    // List tools
+    const tools = await client.listTools();
+    console.log("\n🔧 Available tools:", tools.tools.map(t => t.name));
 
-      if (contentType?.includes("text/event-stream")) {
-        // Handle SSE format
-        const text = await httpResponse.text();
-        console.log("Raw SSE response:");
-        console.log(text);
+    // Test echo tool
+    if (tools.tools.some(t => t.name === "echo")) {
+      console.log("\n🚀 Testing echo tool...");
+      const echoResult = await client.callTool("echo", {
+        message: "Hello from EDA MCP HTTP test!",
+      });
+      console.log("Echo result:", echoResult.content[0]?.text);
+    }
 
-        // Parse SSE data
-        const lines = text.split("\n");
-        for (const line of lines) {
-          if (line.startsWith("data: ")) {
-            try {
-              const data = JSON.parse(line.slice(6));
-              console.log("\nParsed data:", JSON.stringify(data, null, 2));
-            } catch (e) {
-              // Skip non-JSON data lines
-            }
-          }
-        }
-      } else {
-        const data = await httpResponse.json();
-        console.log("JSON Response:", JSON.stringify(data, null, 2));
+    // Test EDA tool if available
+    if (tools.tools.some(t => t.name === "exploratory_data_analysis")) {
+      console.log("\n📊 Testing EDA tool (basic info)...");
+      try {
+        const edaResult = await client.callTool("exploratory_data_analysis", {
+          file_path: "data/sample_data.csv",
+          analysis_type: "basic_info",
+        });
+        console.log("EDA result preview:", edaResult.content[0]?.text?.substring(0, 200) + "...");
+      } catch (error) {
+        console.log("EDA test failed (expected if sample data doesn't exist):", error.message);
       }
-    } else {
-      console.log(`HTTP ${httpResponse.status}: ${httpResponse.statusText}`);
-      const text = await httpResponse.text();
-      console.log("Response body:", text);
     }
 
-    console.log("\n---\n");
-
-    // Test initialize first
-    console.log("Testing initialize method:");
-    const initResponse = await fetch(`${baseUrl}/mcp`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json, text/event-stream",
-      },
-      body: JSON.stringify({
-        jsonrpc: "2.0",
-        method: "initialize",
-        params: {
-          protocolVersion: "2024-11-05",
-          capabilities: {},
-          clientInfo: {
-            name: "test-client",
-            version: "1.0.0",
-          },
-        },
-        id: 2,
-      }),
-    });
-
-    if (initResponse.ok) {
-      const data = await initResponse.json();
-      console.log("Initialize response:", JSON.stringify(data, null, 2));
-    }
-
-    console.log("\n---\n");
-
-    // Test SSE endpoint
-    console.log("Testing SSE endpoint at /sse:");
-    const sseResponse = await fetch(`${baseUrl}/sse`, {
-      method: "GET",
-      headers: {
-        Accept: "text/event-stream",
-      },
-    });
-
-    console.log(
-      `SSE endpoint status: ${sseResponse.status} ${sseResponse.statusText}`
-    );
+    console.log("\n✅ HTTP tool testing completed");
   } catch (error) {
-    console.error("Error:", error.message);
-    if (error.stack) {
-      console.error("Stack:", error.stack);
-    }
+    console.error("❌ HTTP test failed:", error.message);
+    process.exit(1);
+  } finally {
+    await client.close();
   }
 }
 

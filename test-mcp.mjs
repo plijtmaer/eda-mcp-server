@@ -138,8 +138,26 @@ async function main() {
   // Handle common tool arguments
   if (toolName === "echo" && toolArgs) {
     args = { message: toolArgs };
-  } else if (toolName === "get-agent-bootcamp-setup-guide" && toolArgs) {
-    args = { language: toolArgs };
+  } else if ((toolName === "exploratory_data_analysis" || toolName === "exploratory-data-analysis") && toolArgs) {
+    // Parse EDA tool arguments
+    try {
+      args = JSON.parse(toolArgs);
+    } catch (e) {
+      console.log("❌ Failed to parse JSON arguments, using defaults");
+      // Default EDA arguments if parsing fails
+      args = {
+        file_path: "data/sample_data.csv",
+        analysis_type: "basic_info"
+      };
+    }
+  } else if (toolArgs) {
+    // Try to parse any other tool arguments as JSON
+    try {
+      args = JSON.parse(toolArgs);
+    } catch (e) {
+      console.log("❌ Failed to parse JSON arguments, treating as string");
+      args = { input: toolArgs };
+    }
   }
   
   await callTool(toolName, args);

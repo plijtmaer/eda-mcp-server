@@ -2,56 +2,50 @@
 
 // Configuration for hosted server - just the transport config
 const hostedConfig = {
-  url: "https://agent-engineering-bootcamp-mcp.vercel.app/sse",
+  url: "https://eda-mcp-server.vercel.app/sse",
 };
 
 // Configuration for local development
 const localConfig = {
-  command: "node",
-  args: [
-    "node_modules/@modelcontextprotocol/server-stdio/dist/index.js",
-    "./build/index.js",
-  ],
-  env: {},
+  command: "tsx",
+  args: ["app/[transport]/route.ts"],
+  env: {
+    NODE_ENV: "development",
+  },
 };
 
 // Generate URLs for both configurations
-function generateDeepLink(config, serverName = "agent-bootcamp") {
-  // Base64 encode the config (not the whole server object)
-  const configStr = JSON.stringify(config);
-  const base64Config = Buffer.from(configStr).toString("base64");
-
-  // URL encode the base64 string
-  const encodedConfig = encodeURIComponent(base64Config);
-
-  return `https://cursor.com/install-mcp?name=${serverName}&config=${encodedConfig}`;
+function generateDeepLink(config, serverName = "eda-mcp-server") {
+  const mcpConfig = { [serverName]: config };
+  const encoded = btoa(JSON.stringify(mcpConfig));
+  return `https://cursor.com/install-mcp?name=${serverName}&config=${encoded}`;
 }
 
 // Generate HTML button
-function generateButton(config, serverName = "agent-bootcamp") {
-  const url = generateDeepLink(config, serverName);
-  return `<a href="${url}"><img src="https://cursor.com/deeplink/mcp-install-dark.svg" alt="Add ${serverName} MCP server to Cursor" height="32" /></a>`;
+function generateButton(config, serverName = "eda-mcp-server") {
+  const deepLink = generateDeepLink(config, serverName);
+  return `<a href="${deepLink}">
+  <img src="https://cursor.com/deeplink/mcp-install-dark.svg" alt="Add ${serverName} MCP server to Cursor" height="32" />
+</a>`;
 }
 
-console.log("=== Cursor MCP Installation Links ===\n");
-
-console.log("For HOSTED server (recommended):");
-console.log(generateDeepLink(hostedConfig));
-console.log("\nHTML Button:");
+console.log("🔗 EDA MCP Server - Cursor Deep Links");
+console.log("====================================");
+console.log();
+console.log("📡 Hosted Server:");
 console.log(generateButton(hostedConfig));
-console.log("\n");
-
-console.log("For LOCAL development:");
-console.log(generateDeepLink(localConfig));
-console.log("\n");
-
-console.log("=== Manual Configuration ===");
-console.log("If the deeplink doesn't work, add this to ~/.cursor/mcp.json:");
-console.log("\nFor hosted server:");
+console.log();
+console.log("🏠 Local Development:");
+console.log(generateButton(localConfig));
+console.log();
+console.log("📋 Manual Configs:");
+console.log();
+console.log("Hosted config JSON:");
 console.log(
-  JSON.stringify({ mcpServers: { "agent-bootcamp": hostedConfig } }, null, 2)
+  JSON.stringify({ mcpServers: { "eda-mcp-server": hostedConfig } }, null, 2)
 );
-console.log("\nFor local development:");
+console.log();
+console.log("Local config JSON:");
 console.log(
-  JSON.stringify({ mcpServers: { "agent-bootcamp": localConfig } }, null, 2)
+  JSON.stringify({ mcpServers: { "eda-mcp-server": localConfig } }, null, 2)
 );

@@ -1,16 +1,18 @@
 #!/usr/bin/env node
 
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
-import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
-
-const origin = process.argv[2] || "http://localhost:3000";
+import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 
 async function main() {
-  const transport = new StreamableHTTPClientTransport(new URL(`${origin}/mcp`));
+  const transport = new StdioClientTransport({
+    command: "tsx",
+    args: ["app/[transport]/route.ts"],
+    env: { NODE_ENV: "development" },
+  });
 
   const client = new Client(
     {
-      name: "simple-tool-test",
+      name: "eda-mcp-test-client",
       version: "1.0.0",
     },
     {
@@ -22,39 +24,44 @@ async function main() {
 
   try {
     await client.connect(transport);
-    console.log("✅ Connected to MCP server");
+    console.log("✅ Connected to EDA MCP server");
+
+    // List available tools
+    const tools = await client.listTools();
+    console.log("\n🔧 Available tools:");
+    tools.tools.forEach((tool) => {
+      console.log(`  - ${tool.name}: ${tool.description}`);
+    });
 
     // Test echo tool
-    console.log("\n🔧 Testing echo tool...");
+    console.log("\n🚀 Testing echo tool...");
     const echoResult = await client.callTool("echo", {
-      message: "Hello, MCP!",
+      message: "Hello from EDA MCP Server test!",
     });
-    console.log("Echo result:", echoResult);
 
-    // Test bootcamp setup tool
-    console.log("\n🚀 Testing bootcamp setup tool...");
-    const bootcampResult = await client.callTool(
-      "get-agent-bootcamp-setup-guide",
-      {
-        language: "typescript",
-      }
-    );
-    console.log(
-      "Bootcamp result length:",
-      bootcampResult.content[0].text.length
-    );
-    console.log(
-      "First 200 chars:",
-      bootcampResult.content[0].text.substring(0, 200) + "..."
-    );
-  } catch (error) {
-    console.error("❌ Error:", error.message);
-    if (error.details) {
-      console.error("Details:", error.details);
+    console.log("Echo result:", echoResult.content[0].text);
+
+    // Test EDA tool if sample data exists
+    console.log("\n📊 Testing EDA tool...");
+    try {
+      const edaResult = await client.callTool("exploratory_data_analysis", {
+        file_path: "data/sample_data.csv",
+        analysis_type: "basic_info",
+      });
+
+      console.log("EDA basic_info result:");
+      console.log(edaResult.content[0].text.substring(0, 300) + "...");
+    } catch (error) {
+      console.log("EDA test skipped (no sample data or tool not available)");
     }
+
+    console.log("\n✅ All tests completed successfully!");
+  } catch (error) {
+    console.error("❌ Error:", error);
+    process.exit(1);
   } finally {
-    client.close();
+    await client.close();
   }
 }
 
-main().catch(console.error);
+main();

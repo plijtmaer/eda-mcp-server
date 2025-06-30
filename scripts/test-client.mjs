@@ -1,33 +1,62 @@
+#!/usr/bin/env node
+
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
-import { SSEClientTransport } from "@modelcontextprotocol/sdk/client/sse.js";
+import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 
-const origin = process.argv[2] || "https://mcp-for-next-js.vercel.app";
-
-async function main() {
-  const transport = new SSEClientTransport(new URL(`${origin}/sse`));
+async function testClient() {
+  const transport = new StdioClientTransport({
+    command: "tsx",
+    args: ["app/[transport]/route.ts"],
+    env: { NODE_ENV: "development" },
+  });
 
   const client = new Client(
     {
-      name: "agent-bootcamp-client",
+      name: "eda-mcp-test-client",
       version: "1.0.0",
     },
     {
       capabilities: {
-        prompts: {},
-        resources: {},
         tools: {},
       },
     }
   );
 
-  console.log("Connecting to", origin);
-  await client.connect(transport);
+  try {
+    await client.connect(transport);
 
-  console.log("Connected", client.getServerCapabilities());
+    // List available tools
+    const tools = await client.listTools();
+    console.log("Available tools:", tools.tools.map((t) => t.name));
 
-  const result = await client.listTools();
-  console.log(result);
-  client.close();
+    // Test each tool
+    for (const tool of tools.tools) {
+      console.log(`\nTesting tool: ${tool.name}`);
+      try {
+        let result;
+        if (tool.name === "echo") {
+          result = await client.callTool(tool.name, {
+            message: "Test message",
+          });
+        } else if (tool.name === "exploratory_data_analysis") {
+          result = await client.callTool(tool.name, {
+            file_path: "data/sample_data.csv",
+            analysis_type: "basic_info",
+          });
+        }
+
+        if (result) {
+          console.log("Result:", result.content[0].text.substring(0, 200));
+        }
+      } catch (error) {
+        console.log(`Error testing ${tool.name}:`, error.message);
+      }
+    }
+  } catch (error) {
+    console.error("Failed to connect:", error);
+  } finally {
+    await client.close();
+  }
 }
 
-main();
+testClient();

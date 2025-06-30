@@ -46,38 +46,12 @@ This project demonstrates a complete **AI-powered data analysis workflow** using
 
 ## 📋 Table of Contents
 
-- [🚀 Quick Start](#-quick-start)
 - [🛠️ Installation & Prerequisites](#️-installation--prerequisites)  
 - [🔬 EDA Tool Deep Dive](#-eda-tool-deep-dive)
 - [🤖 AI Agent Features](#-ai-agent-features)
-- [📊 Sample Datasets](#-sample-datasets)
 - [🧪 Testing & Development](#-testing--development)
-- [🚀 Deployment Guide](#-deployment-guide)
+- [📊 Sample Datasets](#-sample-datasets)
 - [📁 Project Architecture](#-project-architecture)
-
-## 🚀 Quick Start
-
-```bash
-# 1. Clone and install dependencies
-git clone https://github.com/plijtmaer/eda-mcp-server.git
-cd eda-mcp-server
-pnpm install
-
-# 2. Install Python dependencies
-pip3 install pandas matplotlib seaborn numpy
-
-# 3. Set up environment variables
-echo "OPENAI_API_KEY=your_key_here" > .env.local
-
-# 4. Start the MCP server
-pnpm dev
-
-# 5. Test EDA capabilities
-pnpm test:eda correlation_analysis
-
-# 6. Run the AI agent
-pnpm agent
-```
 
 ## 🛠️ Installation & Prerequisites
 
@@ -103,6 +77,40 @@ OPENAI_API_KEY=your_openai_api_key_here
 
 # Optional: Redis for SSE transport (communication only, not data storage)
 REDIS_URL=redis://localhost:6379
+```
+
+### **Setup & Start**
+```bash
+# 1. Clone and install dependencies
+git clone https://github.com/plijtmaer/eda-mcp-server.git
+cd eda-mcp-server
+pnpm install
+
+# 2. Start the MCP server (localhost:3000 for local testing)
+pnpm dev
+
+# 3. Test EDA capabilities - Available analysis types:
+#    • basic_info - Dataset overview and structure
+#    • statistical_summary - Descriptive statistics  
+#    • correlation_analysis - Correlation matrix and relationships
+#    • distribution_plots - Distribution analysis and outliers
+#    • missing_data_analysis - Missing value patterns
+#    • custom_analysis - Execute custom Python code
+
+# Quick test shortcuts (use predefined file/analysis combinations):
+pnpm test:eda                    # → sample_data.csv + basic_info
+pnpm test:eda statistical_summary # → sample_data.csv + statistical_summary
+pnpm test:eda correlation_analysis # → sample_data.csv + correlation_analysis
+
+# Or use full command for custom file/analysis combinations (localhost for local testing):
+node test-mcp.mjs http://localhost:3000 exploratory-data-analysis '{"file_path": "data/sample_data.csv", "analysis_type": "basic_info"}'
+
+node test-mcp.mjs http://localhost:3000 exploratory-data-analysis '{"file_path": "data/sales_data.csv", "analysis_type": "statistical_summary"}'
+
+node test-mcp.mjs http://localhost:3000 exploratory-data-analysis '{"file_path": "data/financial_data.csv", "analysis_type": "correlation_analysis"}'
+
+# 4. Run the simple AI agent (basic implementation for testing and demos)
+pnpm agent
 ```
 
 ## 🔬 EDA Tool Deep Dive
@@ -192,7 +200,7 @@ The **Exploratory Data Analysis** tool is the heart of this system, offering **6
 
 ## 🤖 AI Agent Features
 
-The **TypeScript AI Agent** provides **intelligent automation** of data analysis workflows:
+The **TypeScript AI Agent** provides **intelligent automation** of data analysis workflows. This is a **simple implementation designed for testing and demonstration purposes**:
 
 ### **🧠 Core Capabilities**
 - **Autonomous Planning** - Uses OpenAI to create analysis strategies
@@ -228,46 +236,7 @@ pnpm agent:demo
 - Automated report generation
 - Multiple dataset analysis
 
-## 📊 Sample Datasets
-
-The `/data` folder contains **4 diverse datasets** for comprehensive testing:
-
-### **👥 Employee Data (`sample_data.csv`)**
-**15 rows × 7 columns**
-```
-Columns: name, age, salary, department, years_experience, satisfaction_score, city
-Data Types: Mixed (string, int, float)
-Use Cases: HR analytics, correlation analysis, salary distribution
-```
-
-### **💰 Sales Data (`sales_data.csv`)**  
-**10 rows × 6 columns**
-```
-Columns: product, region, sales_amount, quantity, date, sales_rep
-Data Types: Mixed (string, int, date)
-Use Cases: Revenue analysis, regional performance, sales trends
-```
-
-### **🌤️ Weather Data (`weather_data.txt`)**
-**7 rows × 6 columns**
-```
-Columns: day, condition, temperature_f, humidity, wind_speed, precipitation  
-Data Types: Mixed (string, int, float)
-Use Cases: Environmental analysis, pattern detection, forecasting
-```
-
-### **🏢 Financial Data (`financial_data.csv`)**
-**8 rows × 7 columns**
-```
-Columns: company, sector, revenue_million, profit_margin, employees, market_cap_billion, debt_ratio
-Data Types: Mixed (string, float, int)
-Use Cases: Corporate analysis, sector comparison, financial ratios
-```
-
-### **📁 Adding Your Own Data**
-1. Place CSV/TXT files in `/data` folder
-2. Ensure structured format (comma/semicolon/tab separated)
-3. Use file path: `"./data/your_file.csv"`
+**Note**: This agent serves as a **proof-of-concept** for MCP-based data analysis automation. For production use, consider implementing more sophisticated planning, memory, and error handling.
 
 ## 🧪 Testing & Development
 
@@ -310,39 +279,46 @@ pnpm agent:demo
 DEBUG=* pnpm agent
 ```
 
-## 🚀 Deployment Guide
+## 📊 Sample Datasets
 
-### **🔥 Vercel Deployment (Recommended)**
+The `/data` folder contains **4 diverse datasets** for comprehensive testing:
 
-1. **Deploy from GitHub:**
-```bash
-# Install Vercel CLI
-npm i -g vercel
-
-# Deploy directly from GitHub
-vercel --repo https://github.com/plijtmaer/eda-mcp-server
+### **👥 Employee Data (`sample_data.csv`)**
+**15 rows × 7 columns**
+```
+Columns: name, age, salary, department, years_experience, satisfaction_score, city
+Data Types: Mixed (string, int, float)
+Use Cases: HR analytics, correlation analysis, salary distribution
 ```
 
-2. **Environment variables in Vercel:**
-- Set `OPENAI_API_KEY=your_openai_api_key` in Vercel dashboard
-- Optionally set `REDIS_URL` for SSE transport
-
-3. **Python dependencies:**
-- Vercel automatically installs Python packages if you add a `requirements.txt` file
-
-### **🐳 Docker Deployment**
-
-Create `Dockerfile`:
-```dockerfile
-FROM node:18-alpine
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-RUN npm run build
-EXPOSE 3000
-CMD ["npm", "start"]
+### **💰 Sales Data (`sales_data.csv`)**  
+**10 rows × 6 columns**
 ```
+Columns: product, region, sales_amount, quantity, date, sales_rep
+Data Types: Mixed (string, int, date)
+Use Cases: Revenue analysis, regional performance, sales trends
+```
+
+### **🌤️ Weather Data (`weather_data.txt`)**
+**7 rows × 6 columns**
+```
+Columns: day, condition, temperature_f, humidity, wind_speed, precipitation  
+Data Types: Mixed (string, int, float)
+Use Cases: Environmental analysis, pattern detection, forecasting
+```
+
+### **🏢 Financial Data (`financial_data.csv`)**
+**8 rows × 7 columns**
+```
+Columns: company, sector, revenue_million, profit_margin, employees, market_cap_billion, debt_ratio
+Data Types: Mixed (string, float, int)
+Use Cases: Corporate analysis, sector comparison, financial ratios
+```
+
+### **📁 Adding Your Own Data**
+1. Place CSV/TXT files in `/data` folder
+2. Ensure structured format (comma/semicolon/tab separated)
+3. Use file path: `"./data/your_file.csv"`
 
 ## 📁 Project Architecture
 

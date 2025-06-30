@@ -1,6 +1,6 @@
 export const metadata = {
-  title: "MCP Server for Agent Engineering bootcamp",
-  description: "For our students to get personalized onboarding",
+  title: "EDA MCP Server - Exploratory Data Analysis Platform",
+  description: "AI-powered Exploratory Data Analysis MCP server with TypeScript/Python integration for comprehensive data analysis workflows.",
 };
 
 export default function RootLayout({

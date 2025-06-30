@@ -1,59 +1,50 @@
 #!/usr/bin/env node
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
-import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
-import { spawn } from "child_process";
+import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
+
+const serverUrl =
+  process.argv[2] || "https://eda-mcp-server.vercel.app/mcp";
 
 async function testToolDiscovery() {
-  console.log("Testing MCP Tool Discovery...\n");
+  console.log(`🔍 Discovering tools from: ${serverUrl}`);
 
-  const serverUrl =
-    process.argv[2] || "https://agent-engineering-bootcamp-mcp.vercel.app/mcp";
-
-  console.log(`Testing server: ${serverUrl}\n`);
+  const transport = new StreamableHTTPClientTransport(new URL(serverUrl));
+  const client = new Client(
+    {
+      name: "eda-mcp-tool-discovery",
+      version: "1.0.0",
+    },
+    {
+      capabilities: {
+        tools: {},
+      },
+    }
+  );
 
   try {
-    const transport = new StdioClientTransport({
-      command: "npx",
-      args: ["-y", "@modelcontextprotocol/server-everything", serverUrl],
+    await client.connect(transport);
+    console.log("✅ Connected successfully");
+
+    const tools = await client.listTools();
+    console.log(`\n📊 Found ${tools.tools.length} tools:`);
+
+    tools.tools.forEach((tool, index) => {
+      console.log(`\n${index + 1}. ${tool.name}`);
+      console.log(`   Description: ${tool.description}`);
+      if (tool.inputSchema?.properties) {
+        console.log(`   Parameters:`);
+        Object.entries(tool.inputSchema.properties).forEach(([param, schema]) => {
+          console.log(`     - ${param}: ${schema.type || 'any'} ${schema.description ? `(${schema.description})` : ''}`);
+        });
+      }
     });
 
-    const client = new Client(
-      {
-        name: "test-tool-discovery",
-        version: "1.0.0",
-      },
-      {
-        capabilities: {},
-      }
-    );
-
-    await client.connect(transport);
-    console.log("✅ Connected to MCP server\n");
-
-    console.log("📋 Listing available tools:");
-    const toolsResponse = await client.listTools();
-
-    if (toolsResponse.tools.length === 0) {
-      console.log("❌ No tools found!");
-    } else {
-      console.log(`✅ Found ${toolsResponse.tools.length} tools:\n`);
-
-      toolsResponse.tools.forEach((tool, index) => {
-        console.log(`${index + 1}. ${tool.name}`);
-        console.log(`   Description: ${tool.description}`);
-        console.log(
-          `   Input Schema: ${JSON.stringify(tool.inputSchema, null, 2)}`
-        );
-        console.log("");
-      });
-    }
-
-    await client.close();
+    console.log(`\n✅ Tool discovery completed`);
   } catch (error) {
-    console.error("❌ Error:", error.message);
-    if (error.cause) {
-      console.error("Cause:", error.cause);
-    }
+    console.error("❌ Failed to discover tools:", error.message);
+    process.exit(1);
+  } finally {
+    await client.close();
   }
 }
 
