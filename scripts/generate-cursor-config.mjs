@@ -2,77 +2,64 @@
 
 const serverUrl = "https://eda-mcp-server.vercel.app";
 
-// Local development config
-const localConfig = {
-  command: "tsx",
-  args: ["app/[transport]/route.ts"],
-  env: {
-    NODE_ENV: "development",
-  },
-};
+console.log("Cursor MCP Configuration Options:\n");
 
-// Hosted config using the EDA MCP Server
-const hostedConfig = {
-  command: "npx",
-  args: [
-    "-y",
-    "@modelcontextprotocol/server-everything",
-    `${serverUrl}/mcp`,
-  ],
-};
-
-// Generate MCP config for Cursor
-const edaMcpConfig = {
-  mcpServers: {
-    "eda-mcp-server": hostedConfig,
-  },
-};
-
-// Also generate local development config
-const localMcpConfig = {
-  mcpServers: {
-    "eda-mcp-server": localConfig,
-  },
-};
-
-// Alternative HTTP/SSE configs
-const httpConfig = {
-  mcpServers: {
-    "eda-mcp-server": {
-      command: "npx",
-      args: [
-        "-y",
-        "@modelcontextprotocol/server-everything",
-        `${serverUrl}/mcp`,
-      ],
+console.log("Option 1: Direct SSE Connection (Cursor 0.48.0+):");
+console.log(
+  JSON.stringify(
+    {
+      mcpServers: {
+        "eda-mcp-server": {
+          url: `${serverUrl}/sse`,
+        },
+      },
     },
-  },
-};
+    null,
+    2
+  )
+);
 
-const sseConfig = {
-  mcpServers: {
-    "eda-mcp-server": {
-      command: "npx",
-      args: [
-        "-y",
-        "@modelcontextprotocol/server-everything",
-        `${serverUrl}/sse`,
-      ],
+console.log("\n---\n");
+
+console.log("Option 2: Using server-everything proxy:");
+console.log(
+  JSON.stringify(
+    {
+      mcpServers: {
+        "eda-mcp-server": {
+          command: "npx",
+          args: [
+            "-y",
+            "@modelcontextprotocol/server-everything",
+            `${serverUrl}/mcp`,
+          ],
+          env: {},
+        },
+      },
     },
-  },
-};
+    null,
+    2
+  )
+);
 
-console.log("🔧 EDA MCP Server - Cursor Configurations");
-console.log("=====================================");
-console.log();
-console.log("📡 Hosted (Default):");
-console.log(JSON.stringify(edaMcpConfig, null, 2));
-console.log();
-console.log("🏠 Local Development:");
-console.log(JSON.stringify(localMcpConfig, null, 2));
-console.log();
-console.log("🌐 HTTP Transport:");
-console.log(JSON.stringify(httpConfig, null, 2));
-console.log();
-console.log("📊 SSE Transport:");
-console.log(JSON.stringify(sseConfig, null, 2));
+console.log("\n---\n");
+
+console.log("Option 3: Using mcp-client-cli:");
+console.log(
+  JSON.stringify(
+    {
+      mcpServers: {
+        "eda-mcp-server": {
+          command: "npx",
+          args: ["-y", "mcp-client-cli", `${serverUrl}/sse`],
+        },
+      },
+    },
+    null,
+    2
+  )
+);
+
+console.log(
+  "\nNote: Try these configurations in order. Option 1 is the simplest if you have Cursor 0.48.0 or later."
+);

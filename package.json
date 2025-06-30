@@ -11,6 +11,7 @@
     "test:eda": "node test-eda.mjs",
     "agent": "tsx agent/simple-agent.ts",
     "agent:demo": "tsx agent/simple-agent.ts demo",
+    "generate:cursor-config": "node scripts/generate-cursor-config.mjs",
     "generate:cursor-link": "node scripts/generate-cursor-deeplink.mjs"
   },
   "dependencies": {
