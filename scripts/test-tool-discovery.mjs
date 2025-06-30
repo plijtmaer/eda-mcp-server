@@ -9,17 +9,17 @@ async function testToolDiscovery() {
   console.log(`🔍 Discovering tools from: ${serverUrl}`);
 
   const transport = new StreamableHTTPClientTransport(new URL(serverUrl));
-  const client = new Client(
-    {
+    const client = new Client(
+      {
       name: "eda-mcp-tool-discovery",
-      version: "1.0.0",
-    },
-    {
+        version: "1.0.0",
+      },
+      {
       capabilities: {
         tools: {},
       },
-    }
-  );
+      }
+    );
 
   try {
     await client.connect(transport);
@@ -30,7 +30,7 @@ async function testToolDiscovery() {
 
     tools.tools.forEach((tool, index) => {
       console.log(`\n${index + 1}. ${tool.name}`);
-      console.log(`   Description: ${tool.description}`);
+        console.log(`   Description: ${tool.description}`);
       if (tool.inputSchema?.properties) {
         console.log(`   Parameters:`);
         Object.entries(tool.inputSchema.properties).forEach(([param, schema]) => {

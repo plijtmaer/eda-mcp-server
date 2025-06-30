@@ -10,16 +10,16 @@ export default function Home() {
           content="AI-powered Exploratory Data Analysis MCP server with TypeScript/Python integration for comprehensive data analysis workflows."
         />
         <style>{`
-          body {
+            body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            line-height: 1.6;
+                line-height: 1.6;
             margin: 0;
             padding: 40px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            color: #333;
+                color: #333;
           }
-          .container {
+            .container {
             max-width: 800px;
             margin: 0 auto;
             background: rgba(255, 255, 255, 0.95);
@@ -27,28 +27,28 @@ export default function Home() {
             padding: 30px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
             backdrop-filter: blur(10px);
-          }
-          h1 {
+            }
+            h1 {
             color: #2c3e50;
-            margin-bottom: 8px;
+                margin-bottom: 8px;
             font-size: 2.2em;
             font-weight: 700;
             text-align: center;
-          }
-          .subtitle {
+            }
+            .subtitle {
             text-align: center;
             color: #7f8c8d;
             margin-bottom: 25px;
             font-size: 1.1em;
-          }
-          .description {
+            }
+            .description {
             background: #f8f9fa;
             padding: 20px;
             border-radius: 12px;
             margin: 20px 0;
             border-left: 5px solid #3498db;
             font-size: 0.95em;
-          }
+            }
           .features {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -73,11 +73,11 @@ export default function Home() {
             margin: 0;
           }
           .cta-button {
-            display: inline-block;
+                display: inline-block;
             background: linear-gradient(135deg, #3498db, #2980b9);
             color: white;
             padding: 12px 24px;
-            text-decoration: none;
+                text-decoration: none;
             border-radius: 8px;
             font-weight: 600;
             margin: 8px;
@@ -88,10 +88,10 @@ export default function Home() {
           .cta-button:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
-          }
+            }
           .github-button {
             background: linear-gradient(135deg, #2c3e50, #34495e);
-          }
+            }
           .github-button:hover {
             box-shadow: 0 8px 25px rgba(44, 62, 80, 0.3);
           }
@@ -116,7 +116,7 @@ export default function Home() {
             border-radius: 15px;
             font-size: 0.8em;
             font-weight: 500;
-          }
+            }
         `}</style>
       </head>
       <body>

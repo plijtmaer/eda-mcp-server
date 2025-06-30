@@ -4,13 +4,13 @@ const serverUrl = "https://eda-mcp-server.vercel.app";
 
 console.log("Cursor MCP Configuration Options:\n");
 
-console.log("Option 1: Direct SSE Connection (Cursor 0.48.0+):");
+console.log("Option 1: Direct SSE Connection (Cursor 0.48.0+, for LOCAL development):");
 console.log(
   JSON.stringify(
     {
       mcpServers: {
         "eda-mcp-server": {
-          url: `${serverUrl}/sse`,
+          url: "http://localhost:3000/sse",
         },
       },
     },
@@ -21,7 +21,7 @@ console.log(
 
 console.log("\n---\n");
 
-console.log("Option 2: Using server-everything proxy:");
+console.log("Option 2: Using mcp-remote (Recommended for both local and deployed):");
 console.log(
   JSON.stringify(
     {
@@ -30,7 +30,7 @@ console.log(
           command: "npx",
           args: [
             "-y",
-            "@modelcontextprotocol/server-everything",
+            "mcp-remote",
             `${serverUrl}/mcp`,
           ],
           env: {},
@@ -44,14 +44,14 @@ console.log(
 
 console.log("\n---\n");
 
-console.log("Option 3: Using mcp-client-cli:");
+console.log("Option 3: For local development with mcp-remote:");
 console.log(
   JSON.stringify(
     {
       mcpServers: {
         "eda-mcp-server": {
           command: "npx",
-          args: ["-y", "mcp-client-cli", `${serverUrl}/sse`],
+          args: ["-y", "mcp-remote", "http://localhost:3000/mcp"],
         },
       },
     },
@@ -61,5 +61,5 @@ console.log(
 );
 
 console.log(
-  "\nNote: Try these configurations in order. Option 1 is the simplest if you have Cursor 0.48.0 or later."
+  "\nNote: Try Option 1 for local development if you have Cursor 0.48.0+. Use Option 2 for deployed server."
 );

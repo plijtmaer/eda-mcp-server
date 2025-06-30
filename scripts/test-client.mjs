@@ -23,7 +23,7 @@ async function testClient() {
   );
 
   try {
-    await client.connect(transport);
+  await client.connect(transport);
 
     // List available tools
     const tools = await client.listTools();
@@ -56,7 +56,7 @@ async function testClient() {
     console.error("Failed to connect:", error);
   } finally {
     await client.close();
-  }
+}
 }
 
 testClient();

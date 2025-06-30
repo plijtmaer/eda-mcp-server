@@ -9,6 +9,7 @@
     "setup": "./scripts/setup.sh",
     "test:mcp": "node test-mcp.mjs",
     "test:eda": "node test-eda.mjs",
+    "test:stdio": "npx -y mcp-remote http://localhost:3000/mcp",
     "agent": "tsx agent/simple-agent.ts",
     "agent:demo": "tsx agent/simple-agent.ts demo",
     "generate:cursor-config": "node scripts/generate-cursor-config.mjs",

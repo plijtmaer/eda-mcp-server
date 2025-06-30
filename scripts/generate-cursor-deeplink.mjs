@@ -2,7 +2,13 @@
 
 // Configuration for hosted server - just the transport config
 const hostedConfig = {
-  url: "https://eda-mcp-server.vercel.app/sse",
+  command: "npx",
+  args: [
+    "-y",
+    "mcp-remote",
+    "https://eda-mcp-server.vercel.app/mcp",
+  ],
+  env: {},
 };
 
 // Configuration for local development
@@ -10,10 +16,15 @@ const localConfig = {
   command: "npx",
   args: [
     "-y",
-    "@modelcontextprotocol/server-everything",
+    "mcp-remote",
     "http://localhost:3000/mcp",
   ],
   env: {},
+};
+
+// Direct SSE config for local development (Cursor 0.48.0+)
+const localSSEConfig = {
+  url: "http://localhost:3000/sse",
 };
 
 // Generate URLs for both configurations
@@ -42,8 +53,12 @@ console.log("\nHTML Button:");
 console.log(generateButton(hostedConfig));
 console.log("\n");
 
-console.log("For LOCAL development:");
+console.log("For LOCAL development (mcp-remote):");
 console.log(generateDeepLink(localConfig));
+console.log("\n");
+
+console.log("For LOCAL development (direct SSE, Cursor 0.48.0+):");
+console.log(generateDeepLink(localSSEConfig));
 console.log("\n");
 
 console.log("=== Manual Configuration ===");
@@ -52,7 +67,11 @@ console.log("\nFor hosted server:");
 console.log(
   JSON.stringify({ mcpServers: { "eda-mcp-server": hostedConfig } }, null, 2)
 );
-console.log("\nFor local development:");
+console.log("\nFor local development (mcp-remote):");
 console.log(
   JSON.stringify({ mcpServers: { "eda-mcp-server": localConfig } }, null, 2)
+);
+console.log("\nFor local development (direct SSE):");
+console.log(
+  JSON.stringify({ mcpServers: { "eda-mcp-server": localSSEConfig } }, null, 2)
 );
